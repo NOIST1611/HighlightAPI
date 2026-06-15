@@ -148,15 +148,25 @@ public class HighlightRenderer {
         float partialTick = event.getPartialTick();
         float alpha = getAnimationAlpha(handle, partialTick);
 
+        double x = entity.xOld + (entity.getX() - entity.xOld) * partialTick;
+        double y = entity.yOld + (entity.getY() - entity.yOld) * partialTick;
+        double z = entity.zOld + (entity.getZ() - entity.zOld) * partialTick;
+
+        AABB interpolatedBox = entity.getBoundingBox().move(
+                x - entity.getX(),
+                y - entity.getY(),
+                z - entity.getZ()
+        );
+
         setupRender(handle);
         poseStack.pushPose();
         poseStack.translate(-camPos.x, -camPos.y, -camPos.z);
 
-        renderFill(poseStack, bufferSource, entity.getBoundingBox().inflate(0.002), handle.getFillColor(), alpha);
+        renderFill(poseStack, bufferSource, interpolatedBox.inflate(0.002), handle.getFillColor(), alpha);
 
         VertexConsumer buffer = bufferSource.getBuffer(RenderType.lines());
         float[] color = handle.getOutlineColor();
-        LevelRenderer.renderLineBox(poseStack, buffer, entity.getBoundingBox().inflate(0.002), color[0], color[1], color[2], color[3] * alpha);
+        LevelRenderer.renderLineBox(poseStack, buffer, interpolatedBox.inflate(0.002), color[0], color[1], color[2], color[3] * alpha);
 
         poseStack.popPose();
         bufferSource.endBatch(RenderType.lines());
