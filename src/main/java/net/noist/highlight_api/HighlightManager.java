@@ -3,11 +3,10 @@ package net.noist.highlight_api;
 import net.noist.highlight_api.enums.Lifetime;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Iterator;
 
 public class HighlightManager {
-    private static final CopyOnWriteArrayList<HighlightHandle> highlightHandlers = new CopyOnWriteArrayList<>();
+    private static final ArrayList<HighlightHandle> highlightHandlers = new ArrayList<>();
 
     public static void register(HighlightHandle highlight) {
         highlightHandlers.add(highlight);
@@ -17,20 +16,22 @@ public class HighlightManager {
         highlightHandlers.remove(highlight);
     }
 
-    public static CopyOnWriteArrayList<HighlightHandle> getAllHandlers() {
+    public static ArrayList<HighlightHandle> getAllHandlers() {
         return highlightHandlers;
     }
 
     public static void tick(float deltaTime) {
-        for (int i = highlightHandlers.size() - 1; i >= 0; i--) {
-            HighlightHandle highlightHandle = highlightHandlers.get(i);
+        Iterator<HighlightHandle> iterator = highlightHandlers.iterator();
+
+        while (iterator.hasNext()) {
+            HighlightHandle highlightHandle = iterator.next();
 
             if (highlightHandle.getLifetime() == Lifetime.DELAYED) {
                 highlightHandle.tickRemaining(deltaTime);
             }
 
             if (highlightHandle.isRemoved()) {
-                highlightHandlers.remove(i);
+                iterator.remove();
             }
         }
     }

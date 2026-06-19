@@ -2,10 +2,7 @@ package net.noist.highlight_api;
 
 import net.noist.highlight_api.animation.AnimationRegistry;
 import net.noist.highlight_api.animation.ICustomAnimation;
-import net.noist.highlight_api.enums.AnimationType;
-import net.noist.highlight_api.enums.DepthMode;
-import net.noist.highlight_api.enums.Lifetime;
-import net.noist.highlight_api.enums.RenderMode;
+import net.noist.highlight_api.enums.*;
 
 /**
  * Builder for creating highlights in the world.
@@ -25,6 +22,7 @@ public class HighlightBuilder {
     private Lifetime lifetime;
     private float delay = 0.0f;
     private Object targetEnd;
+    private AnimationScope animationScope = AnimationScope.ALPHA;
 
     public HighlightBuilder(Lifetime lifetime) {
         this.lifetime = Lifetime.ETERNAL;
@@ -160,6 +158,22 @@ public class HighlightBuilder {
     }
 
     /**
+     * Sets the target scope for the highlight's animation.
+     * <p>
+     * Determines whether the animation value (0.0 to 1.0) will affect the highlight's
+     * transparency ({@link AnimationScope#ALPHA}) or its color intensity ({@link AnimationScope#COLOR}).
+     * </p>
+     * If not specified, the default scope is {@link AnimationScope#ALPHA}.
+     *
+     * @param scope the animation scope to apply
+     * @return this builder for method chaining
+     */
+    public HighlightBuilder setAnimationScope(AnimationScope scope) {
+        this.animationScope = scope;
+        return this;
+    }
+
+    /**
      * Finalizes and registers the highlight.
      *
      * @return a {@link HighlightHandle} to control the highlight after creation
@@ -181,5 +195,5 @@ public class HighlightBuilder {
     public Lifetime getLifetime() { return lifetime; }
     public float getDelay() { return delay; }
     public Object getTargetEnd() { return targetEnd; }
-
+    public AnimationScope getAnimationScope() { return  animationScope; }
 }

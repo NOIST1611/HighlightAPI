@@ -1,11 +1,12 @@
 # Highlight API
 
-A Minecraft Forge 1.20.1 library mod that adds support for custom highlights and outlines for blocks, entities and regions.
+A Minecraft Forge 1.20.1 library mod that adds support for custom highlights and outlines for blocks, entities, and regions.
 
 ## Features
-- Outline and fill rendering for blocks, entities and AABB regions
+- Outline and fill rendering for blocks, entities, and AABB regions
 - Region highlighting between two points
 - Built-in animations (Pulse, Blink, Fade In)
+- **Animation Scopes** (animate transparency, color intensity)
 - Custom animation support
 - Depth modes (hide behind blocks or show through)
 - Eternal and delayed lifetime support
@@ -22,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    implementation fg.deobf("maven.modrinth:highlight-api:1.0.2")
+    implementation fg.deobf("maven.modrinth:highlight-api:1.1.0")
 }
 ```
 
@@ -33,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    implementation fg.deobf("com.github.NOIST1611:HighlightAPI:v1.0.0")
+    implementation fg.deobf("com.github.NOIST1611:HighlightAPI:v1.1.0")
 }
 ```
 
@@ -71,20 +72,28 @@ HighlightAPI.create(Lifetime.ETERNAL)
     .register();
 ```
 
-### Delayed highlight
+### Outline Width
 ```java
-HighlightAPI.create(Lifetime.DELAYED, 5.0f)
-    .setTarget(new BlockPos(0, 64, 0))
-    .setOutlineColor(1.0f, 1.0f, 0.0f, 1.0f)
+HighlightAPI.create(Lifetime.ETERNAL)
+    .setTarget(blockPos)
+    .setLineWidth(2.0f) // Default is usually 1.0f or 2.0f
     .register();
 ```
 
-### Animations
+### Animations & Scopes
 ```java
-// Built-in preset
+// Built-in preset animating Alpha (default)
 HighlightAPI.create(Lifetime.ETERNAL)
     .setTarget(blockPos)
     .setAnimation(AnimationType.PULSE)
+    .setAnimationScope(AnimationScope.ALPHA)
+    .register();
+
+// Built-in preset animating Color (fades to black and back)
+HighlightAPI.create(Lifetime.ETERNAL)
+    .setTarget(blockPos)
+    .setAnimation(AnimationType.PULSE)
+    .setAnimationScope(AnimationScope.COLOR)
     .register();
 
 // Custom animation
@@ -111,6 +120,14 @@ HighlightAPI.create(Lifetime.ETERNAL)
     .register();
 ```
 
+### Delayed highlight
+```java
+HighlightAPI.create(Lifetime.DELAYED, 5.0f)
+    .setTarget(new BlockPos(0, 64, 0))
+    .setOutlineColor(1.0f, 1.0f, 0.0f, 1.0f)
+    .register();
+```
+
 ### Modifying after creation
 ```java
 HighlightHandle handle = HighlightAPI.create(Lifetime.ETERNAL)
@@ -118,6 +135,7 @@ HighlightHandle handle = HighlightAPI.create(Lifetime.ETERNAL)
     .register();
 
 handle.setOutlineColor(0.0f, 1.0f, 0.0f, 1.0f);
+handle.setLineWidth(4.0f);
 handle.setVisible(false);
 handle.remove();
 ```

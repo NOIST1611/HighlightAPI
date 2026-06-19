@@ -2,10 +2,7 @@ package net.noist.highlight_api;
 
 import net.noist.highlight_api.animation.AnimationRegistry;
 import net.noist.highlight_api.animation.ICustomAnimation;
-import net.noist.highlight_api.enums.AnimationType;
-import net.noist.highlight_api.enums.DepthMode;
-import net.noist.highlight_api.enums.Lifetime;
-import net.noist.highlight_api.enums.RenderMode;
+import net.noist.highlight_api.enums.*;
 
 /**
  * A handle to control a registered highlight.
@@ -27,6 +24,7 @@ public class HighlightHandle {
     private float remainingTime;
     private Lifetime lifetime;
     private Object targetEnd;
+    private AnimationScope animationScope = AnimationScope.ALPHA;
 
     public HighlightHandle(HighlightBuilder builder) {
         this.outlineColor = builder.getOutlineColor();
@@ -43,6 +41,7 @@ public class HighlightHandle {
         this.remainingTime = builder.getDelay();
         this.lifetime = builder.getLifetime();
         this.targetEnd = builder.getTargetEnd();
+        this.animationScope = builder.getAnimationScope();
 
 
         HighlightManager.register(this);
@@ -160,6 +159,22 @@ public class HighlightHandle {
     }
 
     /**
+     * Sets the target scope of the highlight's animation.
+     * <p>
+     * Determines whether the animation value (0.0 to 1.0) will affect the highlight's
+     * transparency ({@link AnimationScope#ALPHA}) or its color intensity ({@link AnimationScope#COLOR}).
+     * </p>
+     * If not set, the default scope is {@link AnimationScope#ALPHA}.
+     *
+     * @param scope the animation scope to apply
+     * @return this handle for method chaining
+     */
+    public HighlightHandle setAnimationScope(AnimationScope scope) {
+        this.animationScope = scope;
+        return this;
+    }
+
+    /**
      * Removes this highlight from the world.
      * After calling this method the highlight will no longer be rendered.
      */
@@ -181,4 +196,5 @@ public class HighlightHandle {
     public float getRemainingTime() { return remainingTime; }
     public Lifetime getLifetime() { return lifetime; }
     public Object getTargetEnd() { return targetEnd; }
+    public AnimationScope getAnimationScope() { return animationScope; }
 }
