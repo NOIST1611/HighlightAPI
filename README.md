@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    implementation fg.deobf("maven.modrinth:highlight-api:1.1.0")
+    implementation fg.deobf("maven.modrinth:highlight-api:1.0.0")
 }
 ```
 
