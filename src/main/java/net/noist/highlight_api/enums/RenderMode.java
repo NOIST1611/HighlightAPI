@@ -7,12 +7,12 @@ import net.noist.highlight_api.HighlightBuilder;
  */
 public enum RenderMode {
     /**
-     * Highlights a single object (block, entity, or AABB).
+     * Highlights a region between two BlockPos points.
+     * Requires both {@link HighlightBuilder#setTarget} and {@link HighlightBuilder#setTargetEnd} to be set.
      */
     REGION,
     /**
-     * Highlights a region between two BlockPos points.
-     * Requires both {@link HighlightBuilder#setTarget} and {@link HighlightBuilder#setTargetEnd} to be set.
+     * Highlights a single object (block, entity, or AABB).
      */
     DEFAULT
 }
