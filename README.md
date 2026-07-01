@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-    implementation fg.deobf("com.github.NOIST1611:HighlightAPI:v1.1.0")
+    implementation fg.deobf("com.github.NOIST1611:HighlightAPI:v1.0.0")
 }
 ```
 
